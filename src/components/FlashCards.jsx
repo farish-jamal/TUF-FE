@@ -27,6 +27,7 @@ const Flashcards = () => {
   };
 
   const handleGetAllCards = async () => {
+    const toastId = toast.loading('Wait, while we fetch question...')
     try {
       const response = await axios.get(
         "https://tuf-be.onrender.com/api/flashcards",
@@ -37,9 +38,12 @@ const Flashcards = () => {
         }
       );
       if (response.status !== 200) {
+        toast.dismiss(toastId);
         toast.error('Error while fetching cards');
         return;
       }
+      toast.dismiss(toastId);
+      toast.success('Question fetched');
       setFlashcards(response.data.data)
     } catch (error) {
       toast.error('Internal server error');
